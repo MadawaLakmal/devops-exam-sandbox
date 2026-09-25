@@ -6,8 +6,8 @@ WORKDIR /build
 COPY app/requirements.txt .
 RUN pip install --no-cache-dir --target=/install -r requirements.txt
 
-# ---- Final stage: distroless, non-root, no shell ----
-FROM gcr.io/distroless/python3-debian12:nonroot
+# ---- Final stage: Chainguard minimal image, non-root, no shell, near-zero CVEs ----
+FROM cgr.dev/chainguard/python@sha256:992f13b3e2f7d7bef9b0d74caf7d05c12329482b7b1455fe0bfc6531361b9b7d
 
 WORKDIR /app
 
