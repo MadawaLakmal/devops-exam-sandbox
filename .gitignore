@@ -1,0 +1,8 @@
+docs/
+.env
+.env.*
+*.pem
+*.key
+__pycache__/
+*.pyc
+.DS_Store
