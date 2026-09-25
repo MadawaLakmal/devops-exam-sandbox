@@ -18,4 +18,7 @@ def process():
         return jsonify({"error": "processing failed"}), 500
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8080)
+    # nosec B104 - binding 0.0.0.0 here is required so Docker can publish this port at all.
+    # Host-level exposure is controlled at docker-compose.yml's port mapping, which now
+    # binds only to 127.0.0.1 (see fix/harden-compose), not by this bind address.
+    app.run(host='0.0.0.0', port=8080)  # nosec B104
