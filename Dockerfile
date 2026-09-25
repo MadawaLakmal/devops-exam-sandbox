@@ -1,17 +1,21 @@
-# VULNERABILITY: Using a massive base image (includes compilers, shells, and tools)
-FROM python:3.11
+# ---- Build stage: install dependencies only ----
+FROM python:3.11-slim AS builder
 
-# VULNERABILITY: Running as root by default
+WORKDIR /build
+
+COPY app/requirements.txt .
+RUN pip install --no-cache-dir --target=/install -r requirements.txt
+
+# ---- Final stage: distroless, non-root, no shell ----
+FROM gcr.io/distroless/python3-debian12:nonroot
+
 WORKDIR /app
 
-# VULNERABILITY: Copying sensitive local files (like .env or .git) into the image
-COPY app/ .
+COPY --from=builder --chown=65532:65532 /install /app/deps
+COPY --chown=65532:65532 app/ /app
 
-# VULNERABILITY: No caching optimization for layers
-RUN pip install flask redis rq
+ENV PYTHONPATH=/app/deps
 
-# VULNERABILITY: Exposing a privileged port
-EXPOSE 80
+EXPOSE 8080
 
-# VULNERABILITY: Using a shell-based entrypoint which is susceptible to shell injection
-CMD python app.py
+CMD ["app.py"]

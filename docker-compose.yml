@@ -4,7 +4,7 @@ services:
     build: .
     # VULNERABILITY: Mapping to 0.0.0.0 makes the app public to the entire network
     ports:
-      - "80:80"
+      - "80:8080"
     # VULNERABILITY: Privileged mode gives the container root access to the host kernel
     privileged: true
     environment:
