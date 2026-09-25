@@ -4,7 +4,7 @@ import redis
 
 app = Flask(__name__)
 
-redis_client = redis.Redis(host='localhost', port=6379, password=os.environ.get('REDIS_PASSWORD'))
+redis_client = redis.Redis(host='broker', port=6379, password=os.environ.get('REDIS_PASSWORD'))
 
 @app.route('/process', methods=['POST'])
 def process():
